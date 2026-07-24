@@ -104,7 +104,7 @@ enum ServicesDemo {
         do {
             let service = CarrierService(client: client, apikey: apikey)
             let info = try await service.getCarrierInfo(code: "SU", system: "iata")
-            print("6. getCarrierInfo: перевозчик — \(info.carriers?.first?.title ?? "?")")
+            print("6. getCarrierInfo: перевозчик — \(info.carrier?.title ?? info.carriers?.first?.title ?? "?")")
         } catch {
             print("6. getCarrierInfo: ошибка — \(error)")
         }
