@@ -1,0 +1,43 @@
+name: TravelSchedule
+options:
+  bundleIdPrefix: com.a1kd
+  deploymentTarget:
+    iOS: "16.0"
+packages:
+  swift-openapi-generator:
+    url: https://github.com/apple/swift-openapi-generator
+    from: 1.6.0
+  swift-openapi-runtime:
+    url: https://github.com/apple/swift-openapi-runtime
+    from: 1.7.0
+  swift-openapi-urlsession:
+    url: https://github.com/apple/swift-openapi-urlsession
+    from: 1.0.2
+targets:
+  TravelSchedule:
+    type: application
+    platform: iOS
+    sources:
+      - path: TravelSchedule
+        excludes:
+          - "openapi.yaml"
+          - "openapi-generator-config.yaml"
+      - path: TravelSchedule/openapi.yaml
+        buildPhase: resources
+      - path: TravelSchedule/openapi-generator-config.yaml
+        buildPhase: resources
+    dependencies:
+      - package: swift-openapi-runtime
+        product: OpenAPIRuntime
+      - package: swift-openapi-urlsession
+        product: OpenAPIURLSession
+    buildToolPlugins:
+      - plugin: OpenAPIGenerator
+        package: swift-openapi-generator
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.a1kd.TravelSchedule
+        CODE_SIGNING_ALLOWED: NO
+        SWIFT_VERSION: "5.0"
