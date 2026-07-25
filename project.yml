@@ -2,7 +2,7 @@ name: TravelSchedule
 options:
   bundleIdPrefix: com.a1kd
   deploymentTarget:
-    iOS: "16.0"
+    iOS: "17.0"
 packages:
   swift-openapi-generator:
     url: https://github.com/apple/swift-openapi-generator
@@ -38,6 +38,10 @@ targets:
       base:
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Расписание
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: ypBlue
         PRODUCT_BUNDLE_IDENTIFIER: com.a1kd.TravelSchedule
         CODE_SIGNING_ALLOWED: NO
         SWIFT_VERSION: "5.0"
