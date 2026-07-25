@@ -9,6 +9,8 @@ struct Carrier: Identifiable, Hashable {
     let fullTitle: String
     /// Имя картинки в Assets
     let logoName: String
+    /// Широкий логотип для карточки перевозчика — есть не у всех
+    let bannerName: String?
     let email: String
     let phone: String
 }

@@ -45,3 +45,17 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.a1kd.TravelSchedule
         CODE_SIGNING_ALLOWED: NO
         SWIFT_VERSION: "5.0"
+  TravelScheduleUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: TravelScheduleUITests
+    dependencies:
+      - target: TravelSchedule
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.a1kd.TravelScheduleUITests
+        CODE_SIGNING_ALLOWED: NO
+        SWIFT_VERSION: "5.0"
+        TEST_TARGET_NAME: TravelSchedule
