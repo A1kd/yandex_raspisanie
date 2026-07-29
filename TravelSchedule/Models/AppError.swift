@@ -1,7 +1,7 @@
 import Foundation
 
 /// Ошибки, для которых в макете есть отдельные экраны
-enum AppError: Error, Equatable {
+enum AppError: Error, Equatable, Sendable {
     case serverError
     case noInternet
 

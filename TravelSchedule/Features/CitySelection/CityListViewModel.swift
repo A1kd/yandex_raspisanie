@@ -9,7 +9,7 @@ final class CityListViewModel: ObservableObject {
 
     private let provider: CityProviding
 
-    init(provider: CityProviding = MockCityProvider()) {
+    init(provider: CityProviding = NetworkCityProvider()) {
         self.provider = provider
     }
 

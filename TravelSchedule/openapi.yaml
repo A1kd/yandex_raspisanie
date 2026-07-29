@@ -555,6 +555,54 @@ components:
         duration:
           type: integer
           description: Длительность рейса в секундах
+        start_date:
+          type: string
+          description: Дата отправления
+        has_transfers:
+          type: boolean
+          description: Признак наличия пересадок по маршруту
+        transfers:
+          type: array
+          description: Пункты пересадок по пути следования
+          items:
+            $ref: '#/components/schemas/TransferPoint'
+        details:
+          type: array
+          description: Отрезки маршрута с пересадками
+          items:
+            $ref: '#/components/schemas/SegmentDetail'
+    TransferPoint:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Название пункта пересадки
+        popular_title:
+          type: string
+          description: Общепринятое название пункта пересадки
+        short_title:
+          type: string
+          description: Краткое название пункта пересадки
+        code:
+          type: string
+          description: Код пункта пересадки в системе Яндекс Расписаний
+    SegmentDetail:
+      type: object
+      properties:
+        is_transfer:
+          type: boolean
+          description: Признак того, что отрезок является пересадкой
+        thread:
+          $ref: '#/components/schemas/Thread'
+        departure:
+          type: string
+          description: Время отправления с отрезка
+        arrival:
+          type: string
+          description: Время прибытия на отрезке
+        duration:
+          type: integer
+          description: Длительность отрезка в секундах
     Pagination:
       type: object
       properties:

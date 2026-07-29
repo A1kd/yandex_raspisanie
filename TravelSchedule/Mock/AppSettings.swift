@@ -31,12 +31,10 @@ enum ErrorSimulation: String, CaseIterable, Identifiable {
 
 /// Общие настройки приложения. Тема и просмотренные истории
 /// переживают перезапуск — они хранятся в UserDefaults.
+/// Настройки читаются только интерфейсом, поэтому класс привязан к главному актору.
+@MainActor
 final class AppSettings: ObservableObject {
     static let shared = AppSettings()
-
-    /// Симуляция ошибок осталась для отладки экранов «Ошибка сервера» и «Нет интернета».
-    /// На экране настроек её нет — в макете такого переключателя не предусмотрено.
-    @Published var errorSimulation: ErrorSimulation = .none
 
     /// Тема приложения задаётся переключателем в настройках и не зависит от системной
     @Published var isDarkTheme: Bool {

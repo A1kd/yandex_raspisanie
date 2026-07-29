@@ -3,6 +3,7 @@ import Foundation
 
 /// Проигрывает истории по очереди: каждая держится на экране 10 секунд,
 /// после последней экран закрывается.
+@MainActor
 final class StoriesViewModel: ObservableObject {
     /// Сколько показывается одна история — по техническому заданию
     static let storyDuration: TimeInterval = 10
@@ -41,7 +42,11 @@ final class StoriesViewModel: ObservableObject {
         timer = Timer.publish(every: Self.tickInterval, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                self?.tick()
+                // Таймер тикает в главном RunLoop, то есть уже на главном
+                // акторе — компилятору это неизвестно, поэтому assumeIsolated
+                MainActor.assumeIsolated {
+                    self?.tick()
+                }
             }
     }
 

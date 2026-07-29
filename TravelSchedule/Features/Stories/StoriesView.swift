@@ -171,8 +171,9 @@ struct StoriesView: View {
         viewModel.stop()
         withAnimation(.easeIn(duration: 0.2)) {
             isExpanded = false
+        } completion: {
+            onClose()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: onClose)
     }
 }
 

@@ -2,12 +2,11 @@ import SwiftUI
 
 /// Настройки: переключение темы и переход к пользовательскому соглашению
 struct SettingsView: View {
-    @ObservedObject private var settings = AppSettings.shared
-    @State private var isAgreementShown = false
+    @StateObject private var viewModel = SettingsViewModel()
 
     var body: some View {
         VStack(spacing: 0) {
-            Toggle(isOn: $settings.isDarkTheme) {
+            Toggle(isOn: $viewModel.isDarkTheme) {
                 Text("Темная тема")
                     .appFont(.regular17)
                     .foregroundStyle(Color.ypBlack)
@@ -18,7 +17,7 @@ struct SettingsView: View {
             .accessibilityIdentifier("theme-toggle")
 
             Button {
-                isAgreementShown = true
+                viewModel.showAgreement()
             } label: {
                 ListRow(title: "Пользовательское соглашение")
             }
@@ -27,8 +26,8 @@ struct SettingsView: View {
             Spacer()
 
             VStack(spacing: 16) {
-                Text("Приложение использует API «Яндекс.Расписания»")
-                Text("Версия 1.0 (beta)")
+                Text(viewModel.aboutText)
+                Text(viewModel.versionText)
             }
             .appFont(.regular12)
             .foregroundStyle(Color.ypBlack)
@@ -39,7 +38,7 @@ struct SettingsView: View {
         .padding(.top, 24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.ypWhite)
-        .fullScreenCover(isPresented: $isAgreementShown) {
+        .fullScreenCover(isPresented: $viewModel.isAgreementShown) {
             AgreementView()
         }
     }

@@ -3,10 +3,14 @@ import SwiftUI
 /// Карточка перевозчика: логотип, название и контакты.
 /// По тапу на контакт открывается почта или звонилка.
 struct CarrierCardView: View {
-    let carrier: Carrier
+    @StateObject private var viewModel: CarrierCardViewModel
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
+
+    init(carrier: Carrier) {
+        _viewModel = StateObject(wrappedValue: CarrierCardViewModel(carrier: carrier))
+    }
 
     var body: some View {
         ScrollView {
@@ -17,18 +21,22 @@ struct CarrierCardView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 24))
                     .padding(.horizontal, 16)
 
-                Text(carrier.fullTitle)
+                Text(viewModel.carrier.fullTitle)
                     .appFont(.bold24)
                     .foregroundStyle(Color.ypBlack)
                     .padding(.horizontal, 16)
 
                 VStack(spacing: 0) {
-                    ValueRow(title: "E-mail", value: carrier.email) {
-                        open("mailto:\(carrier.email)")
+                    if viewModel.hasEmail {
+                        ValueRow(title: "E-mail", value: viewModel.carrier.email) {
+                            open(viewModel.emailURL)
+                        }
                     }
 
-                    ValueRow(title: "Телефон", value: carrier.phone) {
-                        open("tel:\(phoneDigits)")
+                    if viewModel.hasPhone {
+                        ValueRow(title: "Телефон", value: viewModel.carrier.phone) {
+                            open(viewModel.phoneURL)
+                        }
                     }
                 }
             }
@@ -40,28 +48,21 @@ struct CarrierCardView: View {
         .appNavigationBar(title: "Информация о перевозчике") { dismiss() }
     }
 
-    /// Широкий логотип занимает всю ширину карточки, а значок из списка рейсов
-    /// вписывается по высоте — иначе от квадратной картинки останется середина
+    /// Широкий логотип из макета занимает всю ширину карточки, а логотип
+    /// из API и значок из списка рейсов вписываются по высоте
     @ViewBuilder
     private var logo: some View {
-        if let bannerName = carrier.bannerName {
+        if let bannerName = viewModel.carrier.bannerName {
             Image(bannerName)
                 .resizable()
                 .scaledToFill()
         } else {
-            Image(carrier.logoName)
-                .resizable()
-                .scaledToFit()
+            CarrierLogoView(carrier: viewModel.carrier)
         }
     }
 
-    /// Номер без скобок и дефисов — в таком виде его принимает звонилка
-    private var phoneDigits: String {
-        carrier.phone.filter { $0.isNumber || $0 == "+" }
-    }
-
-    private func open(_ string: String) {
-        guard let url = URL(string: string) else { return }
+    private func open(_ url: URL?) {
+        guard let url else { return }
         openURL(url)
     }
 }

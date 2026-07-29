@@ -8,9 +8,7 @@ struct RouteCard: View {
     var body: some View {
         VStack(spacing: 4) {
             HStack(alignment: .top, spacing: 8) {
-                Image(segment.carrier.logoName)
-                    .resizable()
-                    .scaledToFill()
+                CarrierLogoView(carrier: segment.carrier)
                     .frame(width: 38, height: 38)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
 

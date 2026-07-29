@@ -1,7 +1,7 @@
 import Foundation
 
 /// Рейс между двумя точками маршрута — одна карточка в списке
-struct RouteSegment: Identifiable, Hashable {
+struct RouteSegment: Identifiable, Hashable, Sendable {
     let id: String
     let carrier: Carrier
     let departure: Date
@@ -20,17 +20,17 @@ struct RouteSegment: Identifiable, Hashable {
 
     /// «14 января» — дата отправления в правом верхнем углу карточки
     var dateText: String {
-        RouteSegment.dateFormatter.string(from: departure)
+        departure.formatted(RouteSegment.dateStyle)
     }
 
     /// «22:30»
     var departureText: String {
-        RouteSegment.timeFormatter.string(from: departure)
+        departure.formatted(RouteSegment.timeStyle)
     }
 
     /// «08:15»
     var arrivalText: String {
-        RouteSegment.timeFormatter.string(from: arrival)
+        arrival.formatted(RouteSegment.timeStyle)
     }
 
     /// «20 часов» — время в пути между временами отправления и прибытия
@@ -55,17 +55,13 @@ struct RouteSegment: Identifiable, Hashable {
         }
     }
 
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ru_RU")
-        formatter.dateFormat = "d MMMM"
-        return formatter
-    }()
+    // FormatStyle, в отличие от DateFormatter, Sendable —
+    // его можно спокойно держать в статике при строгой многопоточности
+    private static let dateStyle = Date.FormatStyle(locale: Locale(identifier: "ru_RU"))
+        .day()
+        .month(.wide)
 
-    private static let timeFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ru_RU")
-        formatter.dateFormat = "HH:mm"
-        return formatter
-    }()
+    private static let timeStyle = Date.FormatStyle(locale: Locale(identifier: "ru_RU"))
+        .hour(.twoDigits(amPM: .omitted))
+        .minute(.twoDigits)
 }
