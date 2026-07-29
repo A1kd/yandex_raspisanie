@@ -1,5 +1,6 @@
 import Combine
 import Foundation
+import SwiftUI
 
 /// Что должны вернуть провайдеры данных вместо ответа.
 /// Переключается на экране настроек, чтобы можно было посмотреть
@@ -28,11 +29,43 @@ enum ErrorSimulation: String, CaseIterable, Identifiable {
     }
 }
 
-/// Общие настройки приложения
+/// Общие настройки приложения. Тема и просмотренные истории
+/// переживают перезапуск — они хранятся в UserDefaults.
 final class AppSettings: ObservableObject {
     static let shared = AppSettings()
 
+    /// Симуляция ошибок осталась для отладки экранов «Ошибка сервера» и «Нет интернета».
+    /// На экране настроек её нет — в макете такого переключателя не предусмотрено.
     @Published var errorSimulation: ErrorSimulation = .none
 
-    private init() {}
+    /// Тема приложения задаётся переключателем в настройках и не зависит от системной
+    @Published var isDarkTheme: Bool {
+        didSet { defaults.set(isDarkTheme, forKey: Keys.isDarkTheme) }
+    }
+
+    /// Истории, которые пользователь уже открывал — они показываются приглушёнными
+    @Published private(set) var seenStoryIDs: Set<Int> {
+        didSet { defaults.set(Array(seenStoryIDs), forKey: Keys.seenStoryIDs) }
+    }
+
+    var colorScheme: ColorScheme {
+        isDarkTheme ? .dark : .light
+    }
+
+    private let defaults: UserDefaults
+
+    private enum Keys {
+        static let isDarkTheme = "isDarkTheme"
+        static let seenStoryIDs = "seenStoryIDs"
+    }
+
+    private init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+        isDarkTheme = defaults.bool(forKey: Keys.isDarkTheme)
+        seenStoryIDs = Set(defaults.array(forKey: Keys.seenStoryIDs) as? [Int] ?? [])
+    }
+
+    func markStorySeen(_ id: Int) {
+        seenStoryIDs.insert(id)
+    }
 }
