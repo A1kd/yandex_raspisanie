@@ -16,7 +16,7 @@ final class RouteListViewModel: ObservableObject {
         from: RoutePoint,
         to: RoutePoint,
         filter: RouteFilter = RouteFilter(),
-        provider: RouteProviding = MockRouteProvider()
+        provider: RouteProviding = NetworkRouteProvider()
     ) {
         self.from = from
         self.to = to

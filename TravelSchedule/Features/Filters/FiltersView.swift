@@ -6,11 +6,11 @@ struct FiltersView: View {
     @Binding var filter: RouteFilter
     @Environment(\.dismiss) private var dismiss
 
-    @State private var draft: RouteFilter
+    @StateObject private var viewModel: FiltersViewModel
 
     init(filter: Binding<RouteFilter>) {
         _filter = filter
-        _draft = State(initialValue: filter.wrappedValue)
+        _viewModel = StateObject(wrappedValue: FiltersViewModel(filter: filter.wrappedValue))
     }
 
     var body: some View {
@@ -20,10 +20,10 @@ struct FiltersView: View {
                     section(title: "Время отправления") {
                         ForEach(DepartureInterval.allCases) { interval in
                             Button {
-                                toggle(interval)
+                                viewModel.toggle(interval)
                             } label: {
                                 ListRow(title: interval.title) {
-                                    CheckboxIcon(isOn: draft.intervals.contains(interval))
+                                    CheckboxIcon(isOn: viewModel.draft.intervals.contains(interval))
                                 }
                             }
                         }
@@ -38,9 +38,9 @@ struct FiltersView: View {
             }
             .scrollIndicators(.hidden)
 
-            if !draft.isEmpty {
+            if viewModel.canApply {
                 PrimaryButton(title: "Применить") {
-                    filter = draft
+                    filter = viewModel.draft
                     dismiss()
                 }
                 .padding(.horizontal, 16)
@@ -71,19 +71,11 @@ struct FiltersView: View {
 
     private func transferRow(title: String, value: Bool) -> some View {
         Button {
-            draft.showsTransfers = value
+            viewModel.selectTransfers(value)
         } label: {
             ListRow(title: title) {
-                RadioButtonIcon(isOn: draft.showsTransfers == value)
+                RadioButtonIcon(isOn: viewModel.draft.showsTransfers == value)
             }
-        }
-    }
-
-    private func toggle(_ interval: DepartureInterval) {
-        if draft.intervals.contains(interval) {
-            draft.intervals.remove(interval)
-        } else {
-            draft.intervals.insert(interval)
         }
     }
 }

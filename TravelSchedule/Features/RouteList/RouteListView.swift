@@ -12,7 +12,7 @@ struct RouteListView: View {
         from: RoutePoint,
         to: RoutePoint,
         initialFilter: RouteFilter = RouteFilter(),
-        provider: RouteProviding = MockRouteProvider()
+        provider: RouteProviding = NetworkRouteProvider()
     ) {
         _viewModel = StateObject(
             wrappedValue: RouteListViewModel(

@@ -1,7 +1,7 @@
 import Foundation
 
 /// Интервал отправления с экрана «Уточнить время»
-enum DepartureInterval: String, CaseIterable, Identifiable {
+enum DepartureInterval: String, CaseIterable, Identifiable, Sendable {
     case morning
     case afternoon
     case evening
@@ -34,7 +34,7 @@ enum DepartureInterval: String, CaseIterable, Identifiable {
 }
 
 /// Настройки фильтрации списка рейсов
-struct RouteFilter: Equatable {
+struct RouteFilter: Equatable, Sendable {
     var intervals: Set<DepartureInterval> = []
     /// nil — пользователь ещё не выбрал вариант с пересадками
     var showsTransfers: Bool?

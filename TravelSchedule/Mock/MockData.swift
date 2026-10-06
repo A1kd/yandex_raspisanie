@@ -11,6 +11,7 @@ enum MockData {
         title: "РЖД",
         fullTitle: "ОАО «РЖД»",
         logoName: "brandRZD",
+        logoURL: nil,
         bannerName: "logoRZD",
         email: "i.lozgkina@yandex.ru",
         phone: "+7 (904) 329-27-71"
@@ -21,6 +22,7 @@ enum MockData {
         title: "ФГК",
         fullTitle: "АО «ФГК»",
         logoName: "brandFGK",
+        logoURL: nil,
         bannerName: nil,
         email: "info@fgk.ru",
         phone: "+7 (495) 663-01-01"
@@ -31,6 +33,7 @@ enum MockData {
         title: "Урал логистика",
         fullTitle: "ООО «Урал логистика»",
         logoName: "brandUral",
+        logoURL: nil,
         bannerName: nil,
         email: "info@ural-logistika.ru",
         phone: "+7 (343) 222-33-44"
